@@ -3,6 +3,7 @@
     common:
         lid_topic:  "/ouster/points"
         imu_topic:  "/ouster/imu"
+        body_frame: "os_sensor"  # TF child frame name for odometry
         con_frame: false # true: if you need to combine several LiDAR frames into one
         con_frame_num: 1 # the number of frames combined
         cut_frame: false # true: if you need to cut one LiDAR frame into several subframes
@@ -17,7 +18,7 @@
 
     mapping:
         imu_en: true
-        extrinsic_est_en: false # for aggressive motion, set this variable false
+        extrinsic_est_en: true # for aggressive motion, set this variable false
         imu_time_inte: 0.01 # = 1 / frequency of IMU
         lidar_time_inte: 0.1
         satu_acc: 30.0 # the saturation value of IMU's acceleration. not related to the units
@@ -37,7 +38,7 @@
         ivox_grid_resolution: 2.0
         gravity: [0.0, 0.0, -9.810] # preknown gravity, use when imu_en is false or start from a non-stationary state
         gravity_init: [0.0, 0.0, -9.810] # preknown gravity in the initial IMU frame for unstationary start or in the initial LiDAR frame for using without IMU
-        extrinsic_T: [0.0, 0.0, 0.0]
+        extrinsic_T: [0.002, 0.010, -0.008]
         extrinsic_R: [ 1.0, 0.0, 0.0,
                        0.0, 1.0, 0.0,
                        0.0, 0.0, 1.0 ]

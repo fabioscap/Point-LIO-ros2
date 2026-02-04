@@ -11,7 +11,7 @@ std::vector<double> extrinT(3, 0.0);
 std::vector<double> extrinR(9, 0.0);
 state_input state_in;
 state_output state_out;
-std::string lid_topic, imu_topic;
+std::string lid_topic, imu_topic, body_frame;
 bool prop_at_freq_of_imu = true, check_satu = true, con_frame = false, cut_frame = false;
 bool use_imu_as_input = false, space_down_sample = true, publish_odometry_without_downsample = false;
 int  init_map_size = 10, con_frame_num = 1;
@@ -66,6 +66,7 @@ void readParameters(rclcpp::Node::SharedPtr node)
   node->declare_parameter("point_filter_num", 2);
   node->declare_parameter("common.lid_topic", std::string("/livox/lidar"));
   node->declare_parameter("common.imu_topic", std::string("/livox/imu"));
+  node->declare_parameter("common.body_frame", std::string("body"));
   node->declare_parameter("common.con_frame", false);
   node->declare_parameter("common.con_frame_num", 1);
   node->declare_parameter("common.cut_frame", false);
@@ -122,6 +123,7 @@ void readParameters(rclcpp::Node::SharedPtr node)
   p_pre->point_filter_num = node->get_parameter("point_filter_num").as_int();
   lid_topic = node->get_parameter("common.lid_topic").as_string();
   imu_topic = node->get_parameter("common.imu_topic").as_string();
+  body_frame = node->get_parameter("common.body_frame").as_string();
   con_frame = node->get_parameter("common.con_frame").as_bool();
   con_frame_num = node->get_parameter("common.con_frame_num").as_int();
   cut_frame = node->get_parameter("common.cut_frame").as_bool();
