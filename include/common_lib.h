@@ -5,10 +5,10 @@
 #include <Eigen/Eigen>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
-#include <sensor_msgs/Imu.h>
-#include <nav_msgs/Odometry.h>
-#include <tf/transform_broadcaster.h>
-#include <eigen_conversions/eigen_msg.h>
+#include <sensor_msgs/msg/imu.hpp>
+#include <nav_msgs/msg/odometry.hpp>
+#include <tf2_ros/transform_broadcaster.h>
+#include <tf2_eigen/tf2_eigen.hpp>
 #include <../include/IKFoM/IKFoM_toolkit/esekfom/esekfom.hpp>
 #include <queue>
 
@@ -18,7 +18,7 @@ using namespace Eigen;
 
 typedef MTK::vect<3, double> vect3;
 typedef MTK::SO3<double> SO3;
-typedef MTK::S2<double, 98090, 10000, 1> S2; 
+typedef MTK::S2<double, 98090, 10000, 1> S2;
 typedef MTK::vect<1, double> vect1;
 typedef MTK::vect<2, double> vect2;
 
@@ -121,7 +121,7 @@ struct MeasureGroup     // Lidar data and imu dates for the curent process
     double lidar_beg_time;
     double lidar_last_time;
     PointCloudXYZI::Ptr lidar;
-    deque<sensor_msgs::Imu::ConstPtr> imu;
+    deque<sensor_msgs::msg::Imu::ConstSharedPtr> imu;
 };
 
 template <typename T>
@@ -186,7 +186,7 @@ bool esti_normvector(Matrix<T, 3, 1> &normvec, const PointVector &point, const T
         A(j,2) = point[j].z;
     }
     normvec = A.colPivHouseholderQr().solve(b);
-    
+
     for (int j = 0; j < point_num; j++)
     {
         if (fabs(normvec(0) * point[j].x + normvec(1) * point[j].y + normvec(2) * point[j].z + 1.0f) > threshold)
